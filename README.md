@@ -1,4 +1,4 @@
 # React + Vite
  
-  - npm install
+  - npm install.     
   - npm run present   --> to start the project
