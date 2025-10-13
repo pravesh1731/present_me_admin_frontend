@@ -5,6 +5,8 @@ const SignUpPage = () => {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const [lastName, setLastName] = useState("");
+  const [aadhaarName, setAadhaarName] = useState("");
+  const [designationName, setDesignationName] = useState("");
 
 
    const handleSubmit = () => {
@@ -158,8 +160,8 @@ const SignUpPage = () => {
                   </div>
                 </div>
 
-                {/* Phone (full width) */}
-                <div className="md:col-span-2">
+                {/* Phone */}
+                <div>
                   <label className="block text-xs font-medium text-gray-700 mb-2">
                     Phone Number
                   </label>
@@ -187,8 +189,19 @@ const SignUpPage = () => {
                     />
                   </div>
                 </div>
+                {/* Role (next to Phone on md+) */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Role</label>
+                  <select className="block w-full pl-3 pr-8 py-2 rounded-lg border border-gray-200 bg-white text-sm appearance-none">
+                    <option disabled>Choose Teacher Type</option>
+                    <option>Dean</option>
+                    <option>HOD</option>
+                    <option>Batch Incharge</option>
+                    <option>Subject Teacher</option>
+                  </select>
+                </div>
 
-                {/* Institution (full width) */}
+                {/* Institution (full width, moved below) */}
                 <div className="md:col-span-2">
                   <label className="block text-xs font-medium text-gray-700 mb-2">
                     Institution Name
@@ -223,19 +236,114 @@ const SignUpPage = () => {
                   </div>
                 </div>
 
-                {/* Role select (full width) */}
-                <div className="md:col-span-2">
-                  <label className="block text-xs font-medium text-gray-700 mb-2">
-                    Role
-                  </label>
-                  <select className="block w-full pl-3 pr-8 py-2 rounded-lg border border-gray-200 bg-white text-sm appearance-none">
-                    <option disabled>Choose Teacher Type</option>
-                    <option>Dean</option>
-                    <option>HOD</option>
-                    <option>Batch Incharge</option>
-                    <option>Subject Teacher</option>
-                  </select>
+                {/* Uploads: Aadhaar and Designation ID (styled like other inputs) */}
+                <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Aadhaar Card Upload */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-2">
+                      Upload Aadhaar Card
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center text-gray-300">
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5s-3 1.343-3 3 1.343 3 3 3z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M21 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"
+                            />
+                          </svg>
+                        </span>
+                        <div className="border border-gray-200 rounded-lg pl-10 pr-3 bg-white text-sm text-gray-700 h-11 flex items-center ">
+                          {aadhaarName ? (
+                            <span className="block truncate">{aadhaarName}</span>
+                          ) : (
+                            <span className="text-gray-400">No file chosen</span>
+                          )}
+                        </div>
+                        <input
+                          id="aadhaar"
+                          type="file"
+                          accept="image/*,.pdf"
+                          onChange={(e) => setAadhaarName(e.target.files?.[0]?.name || "")}
+                          className="hidden"
+                        />
+
+                        {/* Choose button positioned inside the right of the box */}
+                        <label htmlFor="aadhaar" className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                          <span className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-[#0BCCEB] to-[#0A80F5] text-white text-sm font-medium shadow-sm cursor-pointer">
+                            Choose file
+                          </span>
+                        </label>
+                      </div>
+                    <p className="mt-2 text-xs text-gray-500">Accepted: JPG, PNG or PDF. Max 5MB.</p>
+                  </div>
+
+                  {/* Designation ID Upload */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-2">
+                      Upload Designation ID
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center text-gray-300">
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5s-3 1.343-3 3 1.343 3 3 3z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M21 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"
+                            />
+                          </svg>
+                        </span>
+                        <div className="border border-gray-200 rounded-lg pl-10 pr-3 bg-white text-sm text-gray-700 h-11 flex items-center ">
+                          {designationName ? (
+                            <span className="block truncate">{designationName}</span>
+                          ) : (
+                            <span className="text-gray-400">No file chosen</span>
+                          )}
+                        </div>
+                        <input
+                          id="designation"
+                          type="file"
+                          accept="image/*,.pdf"
+                          onChange={(e) => setDesignationName(e.target.files?.[0]?.name || "")}
+                          className="hidden"
+                        />
+
+                        {/* Choose button positioned inside the right of the box */}
+                        <label htmlFor="designation" className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                          <span className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-[#0BCCEB] to-[#0A80F5] text-white text-sm font-medium shadow-sm cursor-pointer">
+                            Choose file
+                          </span>
+                        </label>
+                      </div>
+                    <p className="mt-2 text-xs text-gray-500">Accepted: JPG, PNG or PDF. Max 5MB.</p>
+                  </div>
                 </div>
+
+              
 
                 {/* Password */}
                 <div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import Sidebar from "./Sidebar";
+import Sidebar from "../sidebar/Sidebar";
 
 const titleMap = {
   "/": "Dashboard",
@@ -9,9 +9,6 @@ const titleMap = {
   "/chat": "Chat",
   "/attendance": "Attendance",
   "/profile": "Profile",
-  
-  
-  
 };
 
 const Header = () => {
@@ -28,8 +25,16 @@ const Header = () => {
         onClose={() => setMobileOpen(false)}
       />
 
-      <main className={`flex-1 bg-gray-50 min-h-screen pt-14 md:pt-16 md:static transition-all duration-200 ${collapsed ? 'md:ml-20' : 'md:ml-64'}`}>
-        <header className={`mb-6 flex items-center justify-between border-b border-gray-200 shadow-md fixed top-0 left-0 right-0 bg-white z-30 px-4 h-14 ${collapsed ? 'md:left-20' : 'md:left-64'}`}>
+      <main
+        className={`flex-1 bg-gray-50 min-h-screen pt-14 md:pt-16 md:static transition-all duration-200 ${
+          collapsed ? "md:ml-20" : "md:ml-64"
+        }`}
+      >
+        <header
+          className={`mb-6 flex items-center justify-between border-b border-gray-200 shadow-md fixed top-0 left-0 right-0 bg-white z-30 px-4 h-14 ${
+            collapsed ? "md:left-20" : "md:left-64"
+          }`}
+        >
           <div className="flex items-center gap-4">
             <button
               onClick={() => {

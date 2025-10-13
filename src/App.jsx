@@ -1,17 +1,17 @@
 import React from "react";
-import SignUpPage from "./Pages/SignUpPage";
+import SignUpPage from "./Pages/signup/SignUpPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ErrorPage from "./Pages/ErrorPage";
-import SignInPage from "./Pages/SignInPage";
-import TeacherList from "./Pages/TeacherList";
-import MainLayout from "./components/Header";
-import Dashboard from "./Pages/Dashboard";
-import StudentList from "./Pages/StudentList";
-import Chat from "./Pages/ChatPage";
-import Profile from "./Pages/ProfilePage";
-import DownloadAttendance from "./Pages/DownloadAttendance";
-import ForgetPasswordPage from "./Pages/ForgetPasswordPage";
-import AccountVerificationPage from "./Pages/AccountVerificationPage";
+import ErrorPage from "./Pages/error/ErrorPage";
+import SignInPage from "./Pages/signin_page/SignInPage";
+import TeacherList from "./Pages/home/TeacherList";
+import MainLayout from "./components/header/Header";
+import Dashboard from "./Pages/home/Dashboard";
+import StudentList from "./Pages/home/StudentList";
+import Chat from "./Pages/chat/ChatPage";
+import Profile from "./Pages/home/ProfilePage";
+import DownloadAttendance from "./Pages/home/DownloadAttendance";
+import ForgetPasswordPage from "./Pages/froget_password/ForgetPasswordPage";
+import AccountVerificationPage from "./Pages/account_verification_page/AccountVerificationPage";
 
 function App() {
   return (
