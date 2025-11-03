@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { InputFieldSvg, LogoSvg } from "../../components/common/svg/svg";
+import { InputFieldSvg, LogoSvg, EmailSvg } from "../../components/common/svg/svg";
 import Button from "../../components/common/buttons/button";
 
 const SignInPage = () => {
@@ -38,29 +38,7 @@ const SignInPage = () => {
                   </label>
                   <div className="relative">
                     <span className="absolute inset-y-0 left-3 flex items-center text-gray-300">
-                      <svg
-                        className="w-4 h-4"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <rect
-                          x="2"
-                          y="4"
-                          width="20"
-                          height="16"
-                          rx="2"
-                          stroke="currentColor"
-                          strokeWidth="1.2"
-                        />
-                        <path
-                          d="M22 7l-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
-                          stroke="currentColor"
-                          strokeWidth="1.2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
+                      <EmailSvg />
                     </span>
                     <input
                       className="block w-full pl-10 pr-3 py-2 rounded-lg border border-gray-200 bg-white text-sm"
@@ -118,7 +96,7 @@ const SignInPage = () => {
 
                 <div className="pt-4 border-t border-gray-100 text-center">
                   <p className="text-sm text-gray-600">
-                    Don't have an account?{" "}
+                    Don't have an  account?{" "}
                     <a href="/signup" className="text-[#0A80F5]">
                       Create one here
                     </a>

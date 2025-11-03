@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LogoSvg, InputFieldSvg } from "../../components/common/svg/svg.jsx";
+import { LogoSvg, InputFieldSvg, EmailSvg } from "../../components/common/svg/svg.jsx";
 import Button from "../../components/common/buttons/button.jsx";
 
 const SignUpPage = () => {
@@ -86,29 +86,7 @@ const SignUpPage = () => {
                   </label>
                   <div className="relative">
                     <span className="absolute inset-y-0 left-3 flex items-center text-gray-300">
-                      <svg
-                        className="w-4 h-4"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <rect
-                          x="2"
-                          y="4"
-                          width="20"
-                          height="16"
-                          rx="2"
-                          stroke="currentColor"
-                          strokeWidth="1.2"
-                        />
-                        <path
-                          d="M22 7l-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
-                          stroke="currentColor"
-                          strokeWidth="1.2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
+                      <EmailSvg />
                     </span>
                     <input
                       className="block w-full pl-10 pr-3 py-2 rounded-lg border border-gray-200 bg-white text-sm"
