@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { LogoSvg, InputFieldSvg, EmailSvg } from "../../components/common/svg/svg.jsx";
 import Button from "../../components/common/buttons/button.jsx";
+import { Link } from "react-router-dom";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -335,9 +336,9 @@ const SignUpPage = () => {
 
               <p className="mt-4 text-center text-sm text-gray-600">
                 Already have an account?{" "}
-                <a href="/signin" className="text-indigo-600">
+                <Link to="/signin" className="text-indigo-600">
                   Sign in here
-                </a>
+                </Link>
               </p>
             </form>
           </div>
