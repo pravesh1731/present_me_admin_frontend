@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./Pages/error/ErrorPage";
 import SignInPage from "./Pages/signin_page/SignInPage";
 import TeacherList from "./Pages/home/TeacherList";
-import MainLayout from "./components/header/Header";
+import Header from "./components/header/Header";
 import Dashboard from "./Pages/home/Dashboard";
 import StudentList from "./Pages/home/StudentList";
 import Chat from "./Pages/chat/ChatPage";
@@ -12,6 +12,7 @@ import Profile from "./Pages/home/ProfilePage";
 import DownloadAttendance from "./Pages/home/DownloadAttendance";
 import ForgetPasswordPage from "./Pages/froget_password/ForgetPasswordPage";
 import AccountVerificationPage from "./Pages/account_verification_page/AccountVerificationPage";
+import IntroPage from "./Pages/Present-Me landingPage/introPage";
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
 const appRouter = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: <Header />,
     children: [
       { index: true, element: <Dashboard /> },
       { path: "/teachers", element: <TeacherList /> },
@@ -33,6 +34,11 @@ const appRouter = createBrowserRouter([
       { path: "/attendance", element: <DownloadAttendance /> },
       { path: "/profile", element: <Profile /> },
     ],
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/home",
+    element: <IntroPage />,
     errorElement: <ErrorPage />,
   },
   {
