@@ -13,32 +13,36 @@ import DownloadAttendance from "./Pages/home/DownloadAttendance";
 import ForgetPasswordPage from "./Pages/froget_password/ForgetPasswordPage";
 import AccountVerificationPage from "./Pages/account_verification_page/AccountVerificationPage";
 import IntroPage from "./Pages/Present-Me landingPage/introPage";
+import { Provider } from "react-redux";
+import appStore from "./utils/appstore";
 
 function App() {
   return (
-    <div>
-      <RouterProvider router={appRouter} />
-    </div>
+    <Provider store={appStore}>
+      <div>
+        <RouterProvider router={appRouter} />
+      </div>
+    </Provider>
   );
 }
 
 const appRouter = createBrowserRouter([
-  {
+   {
     path: "/",
-    element: <Header />,
-    children: [
-      { index: true, element: <Dashboard /> },
-      { path: "/teachers", element: <TeacherList /> },
-      { path: "/students", element: <StudentList /> },
-      { path: "/chat", element: <Chat /> },
-      { path: "/attendance", element: <DownloadAttendance /> },
-      { path: "/profile", element: <Profile /> },
-    ],
+    element: <IntroPage />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/home",
-    element: <IntroPage />,
+    path: "/admin",
+    element: <Header />,
+    children: [
+      { index: true, element: <Dashboard /> },
+      { path: "/admin/teachers", element: <TeacherList /> },
+      { path: "/admin/students", element: <StudentList /> },
+      { path: "/admin/chat", element: <Chat /> },
+      { path: "/admin/attendance", element: <DownloadAttendance /> },
+      { path: "/admin/profile", element: <Profile /> },
+    ],
     errorElement: <ErrorPage />,
   },
   {

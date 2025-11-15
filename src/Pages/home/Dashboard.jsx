@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { InputFieldSvg } from "../../components/common/svg/svg";
+import { useDispatch, useSelector } from "react-redux";
 
 const Dashboard = () => {
+  const user = useSelector((store) => store.user);
+
+  
   return (
     <section className="space-y-6 ">
       <div className="rounded-xl bg-gradient-to-r from-[#0BCCEB] to-[#0A80F5] text-white p-8 shadow-md">
-        <h2 className="text-2xl font-semibold">Welcome back, Admin</h2>
+        <h2 className="text-2xl font-semibold">Welcome back, {user.firstName}</h2>
         <p className="mt-1">
           Here's what's happening with your attendance system today.
         </p>
@@ -84,7 +88,6 @@ const Dashboard = () => {
           <li className="flex items-center justify-between bg-gray-50 rounded-lg p-4">
             <div className="flex items-center gap-4">
               <div className="bg-gradient-to-br from-amber-400 to-amber-600 p-2 rounded-full text-white">
-                
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

@@ -1,21 +1,70 @@
-import React, { useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import React, { use, useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../sidebar/Sidebar";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../utils/userSlice";
+import axios from "axios";
 
 const titleMap = {
-  "/": "Dashboard",
-  "/teachers": "Teachers",
-  "/students": "Students",
-  "/chat": "Chat",
-  "/attendance": "Attendance",
-  "/profile": "Profile",
+  "/admin": "Dashboard",
+  "/admin/teachers": "Teachers",
+  "/admin/students": "Students",
+  "/admin/chat": "Chat",
+  "/admin/attendance": "Attendance",
+  "/admin/profile": "Profile",
 };
 
 const Header = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
   const location = useLocation();
   const title = titleMap[location.pathname] || "Dashboard";
+
+
+  //this is because jab ham refresh kre to user ka data lost na ho (logout jaisa na ho jye)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const fetchUserData = async () => {
+    try {
+      const user = await axios.get("http://localhost:3000/admin/dashboard", {
+        withCredentials: true,
+      });
+      
+      dispatch(addUser(user.data));
+      setFetchError(null);
+    } catch (err) {
+      setFetchError(err);
+      if (err.response && err.response.status === 401) {
+        navigate("/signin");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#0A80F5]"></div>
+      </div>
+    );
+  }
+
+  if (fetchError && (!fetchError.response || fetchError.response.status !== 401)) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <h2 className="text-2xl font-bold text-red-600 mb-4">Something went wrong</h2>
+        <p className="text-gray-700 mb-2">Unable to load your dashboard. Please try again later.</p>
+        <button onClick={() => window.location.reload()} className="mt-2 px-4 py-2 bg-[#0A80F5] text-white rounded-lg">Retry</button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex">

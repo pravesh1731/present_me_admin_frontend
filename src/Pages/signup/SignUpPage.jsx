@@ -1,48 +1,183 @@
 import React, { useState } from "react";
-import { LogoSvg, InputFieldSvg, EmailSvg } from "../../components/common/svg/svg.jsx";
+import { motion } from "framer-motion";
+import {
+  LogoSvg,
+  InputFieldSvg,
+  EmailSvg,
+} from "../../components/common/svg/svg.jsx";
 import Button from "../../components/common/buttons/button.jsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const SignUpPage = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState("");
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
+  const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [aadhaarName, setAadhaarName] = useState("");
-  const [designationName, setDesignationName] = useState("");
+  const [emailId, setEmailId] = useState("");
+  const [phone, setPhone] = useState("");
+  const [Role, setRole] = useState("");
+  const [InstitutionName, setInstitutionName] = useState("");
+  const [aadhar, setAadhar] = useState(null);
+  const [designationID, setDesignationID] = useState(null);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmit = () => {
-    console.log("Input value:", lastName);
+  const handleSubmit = async () => {
+    const newErrors = {};
+
+    // Validate all fields
+    if (!firstName) newErrors.firstName = "First name is required";
+    if (!lastName) newErrors.lastName = "Last name is required";
+    if (!emailId) newErrors.emailId = "Email is required";
+    if (!phone) newErrors.phone = "Phone number is required";
+    if (!Role) newErrors.Role = "Role is required";
+    if (!InstitutionName)
+      newErrors.InstitutionName = "Institution name is required";
+    if (!aadhar) newErrors.aadhar = "Aadhaar card is required";
+    if (!designationID) newErrors.designationID = "Designation ID is required";
+    if (!password) newErrors.password = "Password is required";
+    if (!confirmPassword)
+      newErrors.confirmPassword = "Confirm password is required";
+
+    // Validate password match
+    if (password && confirmPassword && password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    // Validate terms checkbox
+    if (!agreeToTerms) {
+      newErrors.agreeToTerms = "You must agree to the terms and conditions";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
+    setIsLoading(true);
+
+    try {
+      // Create FormData to handle file uploads
+      const formData = new FormData();
+      formData.append("firstName", firstName);
+      formData.append("lastName", lastName);
+      formData.append("emailId", emailId);
+      formData.append("phone", phone);
+      formData.append("Role", Role);
+      formData.append("InstitutionName", InstitutionName);
+      formData.append("password", password);
+
+      // Append files
+      if (aadhar) formData.append("aadhar", aadhar);
+      if (designationID) formData.append("designationID", designationID);
+
+      const res = await axios.post(
+        "http://localhost:3000/admin/signup",
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      // Show success message
+      setSuccessMessage(
+        "Account created successfully! Redirecting to verification page..."
+      );
+      setIsLoading(false);
+
+      // Redirect after 3 seconds
+      setTimeout(() => {
+        navigate("/pending_verification");
+      }, 3000);
+    } catch (error) {
+      console.error("Error during sign up:", error);
+      setIsLoading(false);
+      setErrors({
+        submit:
+          error.response?.data?.message || "Sign up failed. Please try again.",
+      });
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-start justify-center px-4 py-12 bg-gradient-to-br from-white via-[#0BCCEB]/10 to-[#0A80F5]/10">
+    <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-gradient-to-br from-gray-50 via-blue-50 to-cyan-50">
       <div className="w-full max-w-2xl">
         {/* Top header */}
-        <div className="flex flex-col items-center mb-6">
-          <div className="bg-gradient-to-br from-[#0BCCEB] to-[#0A80F5] p-3 rounded-xl shadow-md">
+        <div className="flex flex-col items-center mb-8">
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+            className="bg-gradient-to-br from-[#0BCCEB] to-[#0A80F5] p-4 rounded-2xl shadow-xl mb-6"
+          >
             <LogoSvg />
-          </div>
+          </motion.div>
 
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent"
+          >
             Join Present-Me
-          </h2>
-          <p className="mt-2 text-gray-600">
-            Create your admin account to get started
-          </p>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="mt-3 text-gray-600 text-center max-w-md"
+          >
+            Create your admin account to manage attendance and classroom
+            operations
+          </motion.p>
         </div>
 
         {/* Card */}
-        <div className="mx-auto w-full ">
-          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-            <div className="bg-gradient-to-r from-white/60 to-[#0BCCEB]/10 border-b border-gray-100 px-6 py-4">
-              <h4 className="text-gray-900 font-semibold">Create Account</h4>
-              <p className="text-gray-600 text-sm mt-1">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mx-auto w-full"
+        >
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden backdrop-blur-sm">
+            <div className="bg-gradient-to-r from-[#0BCCEB]/10 via-[#0A80F5]/5 to-white border-b border-gray-100 px-8 py-6">
+              <h4 className="text-xl font-bold text-gray-900">
+                Create Account
+              </h4>
+              <p className="text-gray-600 text-sm mt-2 flex items-center gap-2">
+                <svg
+                  className="w-4 h-4 text-[#0A80F5]"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clipRule="evenodd"
+                  />
+                </svg>
                 Fill in your information to create an admin account
               </p>
             </div>
 
-            <form className="px-6 py-6 sm:px-8 sm:py-8">
+            <form
+              className="px-6 py-6 sm:px-8 sm:py-8"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+              }}
+            >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* First Name */}
                 <div>
@@ -54,13 +189,20 @@ const SignUpPage = () => {
                       <InputFieldSvg d1="M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.5 20.25a8.25 8.25 0 1 1 15 0v.75H4.5v-.75z" />
                     </span>
                     <input
-                      className="block w-full pl-10 pr-3 py-2 rounded-lg border border-gray-200 bg-white text-sm"
+                      className="block w-full pl-10 pr-3 py-2.5 rounded-lg border border-gray-200 bg-white text-sm transition-all focus:border-[#0A80F5] focus:ring-2 focus:ring-[#0A80F5]/20 focus:outline-none hover:border-gray-300"
                       type="text"
+                      value={firstName}
                       placeholder="First Name"
+                      onChange={(e) => setFirstName(e.target.value)}
+                      required
                     />
                   </div>
+                  {errors.firstName && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {errors.firstName}
+                    </p>
+                  )}
                 </div>
-
                 {/* Last Name */}
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-2">
@@ -71,13 +213,19 @@ const SignUpPage = () => {
                       <InputFieldSvg d1="M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.5 20.25a8.25 8.25 0 1 1 15 0v.75H4.5v-.75z" />
                     </span>
                     <input
-                      className="block w-full pl-10 pr-3 py-2 rounded-lg border border-gray-200 bg-white text-sm"
+                      className="block w-full pl-10 pr-3 py-2.5 rounded-lg border border-gray-200 bg-white text-sm transition-all focus:border-[#0A80F5] focus:ring-2 focus:ring-[#0A80F5]/20 focus:outline-none hover:border-gray-300"
                       type="text"
                       placeholder="Last Name"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
+                      required
                     />
                   </div>
+                  {errors.lastName && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {errors.lastName}
+                    </p>
+                  )}
                 </div>
 
                 {/* Email (full width) */}
@@ -90,11 +238,19 @@ const SignUpPage = () => {
                       <EmailSvg />
                     </span>
                     <input
-                      className="block w-full pl-10 pr-3 py-2 rounded-lg border border-gray-200 bg-white text-sm"
+                      className="block w-full pl-10 pr-3 py-2.5 rounded-lg border border-gray-200 bg-white text-sm transition-all focus:border-[#0A80F5] focus:ring-2 focus:ring-[#0A80F5]/20 focus:outline-none hover:border-gray-300"
                       type="email"
-                      placeholder="Enter the email address provided by your institution"
+                      value={emailId}
+                      placeholder="your.name@institution.edu"
+                      onChange={(e) => setEmailId(e.target.value)}
+                      required
                     />
                   </div>
+                  {errors.emailId && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {errors.emailId}
+                    </p>
+                  )}
                 </div>
 
                 {/* Phone */}
@@ -107,24 +263,55 @@ const SignUpPage = () => {
                       <InputFieldSvg d1="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a1.5 1.5 0 0 0 1.5-1.5v-2.25a1.5 1.5 0 0 0-1.28-1.48l-3.66-.61a1.5 1.5 0 0 0-1.52.75l-.72 1.26a12.035 12.035 0 0 1-5.67-5.67l1.26-.72a1.5 1.5 0 0 0 .75-1.52l-.61-3.66A1.5 1.5 0 0 0 6.75 2.25H4.5A1.5 1.5 0 0 0 3 3.75v3z" />
                     </span>
                     <input
-                      className="block w-full pl-10 pr-3 py-2 rounded-lg border border-gray-200 bg-white text-sm tabular-nums"
+                      className="block w-full pl-10 pr-3 py-2.5 rounded-lg border border-gray-200 bg-white text-sm tabular-nums transition-all focus:border-[#0A80F5] focus:ring-2 focus:ring-[#0A80F5]/20 focus:outline-none hover:border-gray-300"
                       type="tel"
+                      value={phone}
                       placeholder="+91 1234567890"
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
                     />
                   </div>
+                  {errors.phone && (
+                    <p className="mt-1 text-xs text-red-600">{errors.phone}</p>
+                  )}
                 </div>
                 {/* Role (next to Phone on md+) */}
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-2">
                     Role
                   </label>
-                  <select className="block w-full pl-3 pr-8 py-2 rounded-lg border border-gray-200 bg-white text-sm appearance-none">
-                    <option disabled>Choose Teacher Type</option>
-                    <option>Dean</option>
-                    <option>HOD</option>
-                    <option>Batch Incharge</option>
-                    <option>Subject Teacher</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      className="block w-full pl-3 pr-10 py-2.5 rounded-lg border border-gray-200 bg-white text-sm appearance-none transition-all focus:border-[#0A80F5] focus:ring-2 focus:ring-[#0A80F5]/20 focus:outline-none hover:border-gray-300 cursor-pointer"
+                      value={Role}
+                      onChange={(e) => setRole(e.target.value)}
+                      required
+                    >
+                      <option value="" disabled>
+                        Choose Teacher Type
+                      </option>
+                      <option>Dean</option>
+                      <option>HOD</option>
+                      <option>Batch Incharge</option>
+                      <option>Subject Teacher</option>
+                    </select>
+                    <svg
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                  {errors.Role && (
+                    <p className="mt-1 text-xs text-red-600">{errors.Role}</p>
+                  )}
                 </div>
 
                 {/* Institution (full width, moved below) */}
@@ -140,13 +327,20 @@ const SignUpPage = () => {
                       />
                     </span>
                     <input
-                      className="block w-full pl-10 pr-3 py-2 rounded-lg border border-gray-200 bg-white text-sm"
+                      className="block w-full pl-10 pr-3 py-2.5 rounded-lg border border-gray-200 bg-white text-sm transition-all focus:border-[#0A80F5] focus:ring-2 focus:ring-[#0A80F5]/20 focus:outline-none hover:border-gray-300"
                       type="text"
+                      value={InstitutionName}
+                      onChange={(e) => setInstitutionName(e.target.value)}
                       placeholder="University Name in Capital Letters"
+                      required
                     />
                   </div>
+                  {errors.InstitutionName && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {errors.InstitutionName}
+                    </p>
+                  )}
                 </div>
-
                 {/* Uploads: Aadhaar and Designation ID (styled like other inputs) */}
                 <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Aadhaar Card Upload */}
@@ -161,9 +355,11 @@ const SignUpPage = () => {
                           d2="M21 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"
                         />
                       </span>
-                      <div className="border border-gray-200 rounded-lg pl-10 pr-3 bg-white text-sm text-gray-700 h-11 flex items-center ">
-                        {aadhaarName ? (
-                          <span className="block truncate">{aadhaarName}</span>
+                      <div className="border border-gray-200 rounded-lg pl-10 pr-3 bg-white text-sm text-gray-700 h-11 flex items-center transition-all hover:border-gray-300">
+                        {aadhar ? (
+                          <span className="block truncate font-medium">
+                            {aadhar.name}
+                          </span>
                         ) : (
                           <span className="text-gray-400">No file chosen</span>
                         )}
@@ -172,10 +368,9 @@ const SignUpPage = () => {
                         id="aadhaar"
                         type="file"
                         accept="image/*,.pdf"
-                        onChange={(e) =>
-                          setAadhaarName(e.target.files?.[0]?.name || "")
-                        }
+                        onChange={(e) => setAadhar(e.target.files?.[0] || null)}
                         className="hidden"
+                        required
                       />
 
                       {/* Choose button positioned inside the right of the box */}
@@ -183,12 +378,36 @@ const SignUpPage = () => {
                         htmlFor="aadhaar"
                         className="absolute right-2 top-1/2 transform -translate-y-1/2"
                       >
-                        <span className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-[#0BCCEB] to-[#0A80F5] text-white text-sm font-medium shadow-sm cursor-pointer">
+                        <span className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-[#0BCCEB] to-[#0A80F5] text-white text-sm font-medium shadow-md hover:shadow-lg transition-all cursor-pointer hover:scale-105">
+                          <svg
+                            className="w-4 h-4 mr-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                            />
+                          </svg>
                           Choose file
                         </span>
                       </label>
                     </div>
-                    <p className="mt-2 text-xs text-gray-500">
+                    <p className="mt-2 text-xs text-gray-500 flex items-center gap-1">
+                      <svg
+                        className="w-3.5 h-3.5"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
                       Accepted: JPG, PNG or PDF. Max 5MB.
                     </p>
                   </div>
@@ -205,10 +424,10 @@ const SignUpPage = () => {
                           d2="M21 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"
                         />
                       </span>
-                      <div className="border border-gray-200 rounded-lg pl-10 pr-3 bg-white text-sm text-gray-700 h-11 flex items-center ">
-                        {designationName ? (
-                          <span className="block truncate">
-                            {designationName}
+                      <div className="border border-gray-200 rounded-lg pl-10 pr-3 bg-white text-sm text-gray-700 h-11 flex items-center transition-all hover:border-gray-300">
+                        {designationID ? (
+                          <span className="block truncate font-medium">
+                            {designationID.name}
                           </span>
                         ) : (
                           <span className="text-gray-400">No file chosen</span>
@@ -219,9 +438,10 @@ const SignUpPage = () => {
                         type="file"
                         accept="image/*,.pdf"
                         onChange={(e) =>
-                          setDesignationName(e.target.files?.[0]?.name || "")
+                          setDesignationID(e.target.files?.[0] || null)
                         }
                         className="hidden"
+                        required
                       />
 
                       {/* Choose button positioned inside the right of the box */}
@@ -229,12 +449,36 @@ const SignUpPage = () => {
                         htmlFor="designation"
                         className="absolute right-2 top-1/2 transform -translate-y-1/2"
                       >
-                        <span className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-[#0BCCEB] to-[#0A80F5] text-white text-sm font-medium shadow-sm cursor-pointer">
+                        <span className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-[#0BCCEB] to-[#0A80F5] text-white text-sm font-medium shadow-md hover:shadow-lg transition-all cursor-pointer hover:scale-105">
+                          <svg
+                            className="w-4 h-4 mr-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                            />
+                          </svg>
                           Choose file
                         </span>
                       </label>
                     </div>
-                    <p className="mt-2 text-xs text-gray-500">
+                    <p className="mt-2 text-xs text-gray-500 flex items-center gap-1">
+                      <svg
+                        className="w-3.5 h-3.5"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
                       Accepted: JPG, PNG or PDF. Max 5MB.
                     </p>
                   </div>
@@ -260,9 +504,12 @@ const SignUpPage = () => {
                       </svg>
                     </span>
                     <input
-                      className="block w-full pl-10 pr-10 py-2 rounded-lg border border-gray-200 bg-white text-sm"
+                      className="block w-full pl-10 pr-10 py-2.5 rounded-lg border border-gray-200 bg-white text-sm transition-all focus:border-[#0A80F5] focus:ring-2 focus:ring-[#0A80F5]/20 focus:outline-none hover:border-gray-300"
                       type={showPassword ? "text" : "password"}
                       placeholder="Create password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
                     />
                     <button
                       type="button"
@@ -281,6 +528,11 @@ const SignUpPage = () => {
                       )}
                     </button>
                   </div>
+                  {errors.password && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {errors.password}
+                    </p>
+                  )}
                 </div>
 
                 {/* Confirm Password */}
@@ -293,9 +545,12 @@ const SignUpPage = () => {
                       <InputFieldSvg d1="M16.5 10.5V7.5a4.5 4.5 0 0 0-9 0v3m-.75 0h10.5a1.5 1.5 0 0 1 1.5 1.5v7.5a1.5 1.5 0 0 1-1.5 1.5H6.75a1.5 1.5 0 0 1-1.5-1.5v-7.5a1.5 1.5 0 0 1 1.5-1.5z" />
                     </span>
                     <input
-                      className="block w-full pl-10 pr-10 py-2 rounded-lg border border-gray-200 bg-white text-sm"
+                      className="block w-full pl-10 pr-10 py-2.5 rounded-lg border border-gray-200 bg-white text-sm transition-all focus:border-[#0A80F5] focus:ring-2 focus:ring-[#0A80F5]/20 focus:outline-none hover:border-gray-300"
                       type={showConfirm ? "text" : "password"}
                       placeholder="Confirm password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
                     />
                     <button
                       type="button"
@@ -315,38 +570,114 @@ const SignUpPage = () => {
                       )}
                     </button>
                   </div>
+                  {errors.confirmPassword && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {errors.confirmPassword}
+                    </p>
+                  )}
                 </div>
               </div>
 
-              <div className="mt-4 flex items-start gap-3">
-                <input type="checkbox" id="agree" className="mt-1" />
-                <label htmlFor="agree" className="text-sm text-gray-700">
+              <div className="flex items-start gap-3 mt-6 p-4 bg-gradient-to-r from-blue-50/50 to-cyan-50/50 rounded-xl border border-blue-100">
+                <input
+                  type="checkbox"
+                  id="agree"
+                  checked={agreeToTerms}
+                  onChange={(e) => setAgreeToTerms(e.target.checked)}
+                  className="mt-1 w-4 h-4 text-[#0A80F5] border-gray-300 rounded focus:ring-[#0A80F5] focus:ring-2 transition-all cursor-pointer"
+                />
+                <label
+                  htmlFor="agree"
+                  className="text-sm text-gray-700 leading-relaxed cursor-pointer"
+                >
                   I agree to the{" "}
-                  <a className="text-indigo-600">Terms of Service</a> and{" "}
-                  <a className="text-indigo-600">Privacy Policy</a>
+                  <a className="text-[#0A80F5] hover:underline font-semibold transition-colors">
+                    Terms of Service
+                  </a>{" "}
+                  and{" "}
+                  <a className="text-[#0A80F5] hover:underline font-semibold transition-colors">
+                    Privacy Policy
+                  </a>
                 </label>
               </div>
+              {errors.agreeToTerms && (
+                <p className="text-xs text-red-600 mt-1 ml-1">
+                  {errors.agreeToTerms}
+                </p>
+              )}
+
+              {/* Success Message */}
+              {successMessage && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="mt-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl shadow-sm"
+                >
+                  <p className="text-sm text-green-800 font-medium flex items-center gap-3">
+                    <svg
+                      className="w-6 h-6 text-green-600"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span>{successMessage}</span>
+                  </p>
+                </motion.div>
+              )}
+
+              {/* Submit Error */}
+              {errors.submit && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="mt-4 p-4 bg-gradient-to-r from-red-50 to-rose-50 border border-red-200 rounded-xl shadow-sm"
+                >
+                  <p className="text-sm text-red-800 font-medium flex items-center gap-3">
+                    <svg
+                      className="w-6 h-6 text-red-600"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span>{errors.submit}</span>
+                  </p>
+                </motion.div>
+              )}
 
               <div className="mt-6">
                 <Button
-                  text="Create Account"
+                  text={isLoading ? "Registering..." : "Create Account"}
                   handleSubmit={handleSubmit}
+                  disabled={isLoading}
                 />
               </div>
 
-              <p className="mt-4 text-center text-sm text-gray-600">
+              <p className="mt-6 text-center text-sm text-gray-600">
                 Already have an account?{" "}
-                <Link to="/signin" className="text-indigo-600">
-                  Sign in here
+                <Link
+                  to="/signin"
+                  className="text-[#0A80F5] hover:text-[#0BCCEB] font-semibold transition-colors"
+                >
+                  Sign in here →
                 </Link>
               </p>
             </form>
           </div>
 
-          <p className="mt-6 text-center text-xs text-gray-500">
+          <p className="mt-8 text-center text-xs text-gray-500">
             © 2024 Present-Me. All rights reserved.
           </p>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

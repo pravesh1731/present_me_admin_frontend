@@ -35,7 +35,8 @@ const Sidebar = ({
 
       <nav className=" flex-1">
         <NavLink
-          to="/"
+          to="/admin"
+          end
           onClick={() => onClose && onClose()}
           className={({ isActive }) =>
             `flex items-center gap-3 p-2 rounded-lg ${
@@ -53,7 +54,7 @@ const Sidebar = ({
           {!collapsed && <span>Dashboard</span>}
         </NavLink>
         <NavLink
-          to="/teachers"
+          to="/admin/teachers"
           onClick={() => onClose && onClose()}
           className={({ isActive }) =>
             `flex items-center gap-3 p-2 rounded-lg ${
@@ -71,7 +72,7 @@ const Sidebar = ({
           {!collapsed && <span>Teachers</span>}
         </NavLink>
         <NavLink
-          to="/students"
+          to="/admin/students"
           onClick={() => onClose && onClose()}
           className={({ isActive }) =>
             `flex items-center gap-3 p-2 rounded-lg ${
@@ -89,7 +90,7 @@ const Sidebar = ({
           {!collapsed && <span>Students</span>}
         </NavLink>
         <NavLink
-          to="/chat"
+          to="/admin/chat"
           onClick={() => onClose && onClose()}
           className={({ isActive }) =>
             `flex items-center gap-3 p-2 rounded-lg ${
@@ -107,7 +108,7 @@ const Sidebar = ({
           {!collapsed && <span>Chat</span>}
         </NavLink>
         <NavLink
-          to="/attendance"
+          to="/admin/attendance"
           onClick={() => onClose && onClose()}
           className={({ isActive }) =>
             `flex items-center gap-3 p-2 rounded-lg ${
@@ -125,7 +126,7 @@ const Sidebar = ({
           {!collapsed && <span>Download Attendance</span>}
         </NavLink>
         <NavLink
-          to="/profile"
+          to="/admin/profile"
           onClick={() => onClose && onClose()}
           className={({ isActive }) =>
             `flex items-center gap-3 p-2 rounded-lg ${
@@ -188,7 +189,8 @@ const Sidebar = ({
 
         <nav className="space-y-2">
           <NavLink
-            to="/"
+            to="/admin"
+            end
             onClick={() => onClose && onClose()}
             className={({ isActive }) =>
               `flex items-center gap-3 p-2 rounded-lg ${
@@ -204,7 +206,7 @@ const Sidebar = ({
             <span>Dashboard</span>
           </NavLink>
           <NavLink
-            to="/teachers"
+            to="/admin/teachers"
             onClick={() => onClose && onClose()}
             className={({ isActive }) =>
               `flex items-center gap-3 p-2 rounded-lg ${
@@ -220,7 +222,7 @@ const Sidebar = ({
             <span>Teachers</span>
           </NavLink>
           <NavLink
-            to="/students"
+            to="/admin/students"
             onClick={() => onClose && onClose()}
             className={({ isActive }) =>
               `flex items-center gap-3 p-2 rounded-lg ${
@@ -236,7 +238,7 @@ const Sidebar = ({
             <span>Students</span>
           </NavLink>
           <NavLink
-            to="/chat"
+            to="/admin/chat"
             onClick={() => onClose && onClose()}
             className={({ isActive }) =>
               `flex items-center gap-3 p-2 rounded-lg ${
@@ -253,7 +255,7 @@ const Sidebar = ({
             <span>Chat</span>
           </NavLink>
           <NavLink
-            to="/attendance"
+            to="/admin/attendance"
             onClick={() => onClose && onClose()}
             className={({ isActive }) =>
               `flex items-center gap-3 p-2 rounded-lg ${
@@ -270,7 +272,7 @@ const Sidebar = ({
             <span>Attendance</span>
           </NavLink>
           <NavLink
-            to="/profile"
+            to="/admin/profile"
             onClick={() => onClose && onClose()}
             className={({ isActive }) =>
               `flex items-center gap-3 p-2 rounded-lg ${

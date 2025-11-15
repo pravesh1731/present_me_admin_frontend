@@ -1,6 +1,19 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
 
 const AccountVerificationPage = () => {
+
+  const deleteToken = async() => {
+    try{
+      await axios.post("http://localhost:3000/admin/logout", {}, {withCredentials: true});
+    }catch(err){
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    deleteToken();
+  }, []);
   return (
     <div className="min-h-screen flex flex-col items-center bg-gradient-to-br from-white via-[#0BCCEB]/10 to-[#0A80F5]/10 p-6">
       <div className="max-w-2xl w-full text-center mt-10">

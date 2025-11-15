@@ -304,44 +304,44 @@ const IntroPage = () => {
               className="flex items-center gap-3"
               whileHover={{ scale: 1.05 }}
             >
-              <motion.div 
+              <motion.div
                 className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg p-0.5 overflow-hidden relative"
-                animate={{ 
+                animate={{
                   boxShadow: [
                     "0 10px 15px -3px rgba(11, 204, 235, 0.3)",
                     "0 10px 15px -3px rgba(10, 128, 245, 0.3)",
-                    "0 10px 15px -3px rgba(11, 204, 235, 0.3)"
-                  ]
+                    "0 10px 15px -3px rgba(11, 204, 235, 0.3)",
+                  ],
                 }}
                 transition={{
                   duration: 3,
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: "easeInOut",
                 }}
               >
                 <motion.img
                   src={logo}
                   alt="Present-Me Logo"
                   className="w-full h-full object-cover scale-110"
-                  animate={{ 
-                    rotate: [0, 5, -5, 0]
+                  animate={{
+                    rotate: [0, 5, -5, 0],
                   }}
                   transition={{
                     duration: 4,
                     repeat: Infinity,
-                    ease: "easeInOut"
+                    ease: "easeInOut",
                   }}
                 />
                 <motion.div
                   className="absolute inset-0 rounded-full bg-gradient-to-r from-[#0BCCEB]/20 to-[#0A80F5]/20"
-                  animate={{ 
+                  animate={{
                     scale: [1, 1.2, 1],
-                    opacity: [0.3, 0, 0.3]
+                    opacity: [0.3, 0, 0.3],
                   }}
                   transition={{
                     duration: 2,
                     repeat: Infinity,
-                    ease: "easeInOut"
+                    ease: "easeInOut",
                   }}
                 />
               </motion.div>
