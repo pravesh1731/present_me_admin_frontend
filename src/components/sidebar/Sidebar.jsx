@@ -1,6 +1,7 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { InputFieldSvg, LogoSvg } from "../common/svg/svg";
+import axios from "axios";
 
 const Sidebar = ({
   className = "",
@@ -8,6 +9,21 @@ const Sidebar = ({
   mobileOpen = false,
   onClose,
 }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:3000/admin/logout",
+        {},
+        { withCredentials: true }
+      );
+      navigate("/signin");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
   // Desktop sidebar (hidden on small screens), shrinks when collapsed
   const desktop = (
     <aside
@@ -147,6 +163,7 @@ const Sidebar = ({
 
       <div className="mt-auto pt-6">
         <button
+          onClick={handleLogout}
           className={`w-full text-left text-red-500 ${
             collapsed ? "text-center" : ""
           }`}
@@ -291,7 +308,12 @@ const Sidebar = ({
         </nav>
 
         <div className="mt-6">
-          <button className="w-full text-left text-red-500">Logout</button>
+          <button
+            onClick={handleLogout}
+            className="w-full text-left text-red-500"
+          >
+            Logout
+          </button>
         </div>
       </div>
     </div>

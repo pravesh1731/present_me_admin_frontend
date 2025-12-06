@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux';
 
 const permissions = ['User Management','System Configuration','Report Generation','Data Export','Teacher Approval','Student Records']
 
 const ProfilePage = () => {
+  const user = useSelector((store) => store.user);
+
   const [editing, setEditing] = useState(false)
-  const [fullName, setFullName] = useState('John Administrator')
-  const [email, setEmail] = useState('admin@attendanceapp.edu')
-  const [phone, setPhone] = useState('+1 (555) 987-6543')
+  const [fullName, setFullName] = useState(user.firstName + ' ' + user.lastName)
+  const [email, setEmail] = useState(user.emailId)
+  const [phone, setPhone] = useState(user.phone)
   const [location, setLocation] = useState('Main Campus')
-  const [role, setRole] = useState('System Administrator')
-  const [department, setDepartment] = useState('IT Administration')
-  const [bio, setBio] = useState('Experienced education technology administrator with over 8 years in student information systems and attendance management.')
+  const [role, setRole] = useState(user.Role)
+  const [department, setDepartment] = useState("")
+  const [bio, setBio] = useState('')
   
   const toggleEdit = () => {
     if (editing) {
