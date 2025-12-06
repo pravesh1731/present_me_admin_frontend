@@ -28,6 +28,10 @@ const SignUpPage = () => {
   const [designationID, setDesignationID] = useState(null);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [address, setAddress] = useState("");
+  const [website, setWebsite] = useState("");
+  const [expectedStudents, setExpectedStudents] = useState("");
+  const [expectedTeachers, setExpectedTeachers] = useState("");
 
   const handleSubmit = async () => {
     const newErrors = {};
@@ -45,6 +49,10 @@ const SignUpPage = () => {
     if (!password) newErrors.password = "Password is required";
     if (!confirmPassword)
       newErrors.confirmPassword = "Confirm password is required";
+    if (!address) newErrors.address = "Address is required";
+    if (!website) newErrors.website = "Website is required";
+    if (!expectedStudents) newErrors.expectedStudents = "Expected students is required";
+    if (!expectedTeachers) newErrors.expectedTeachers = "Expected teachers is required";
 
     // Validate password match
     if (password && confirmPassword && password !== confirmPassword) {
@@ -74,6 +82,10 @@ const SignUpPage = () => {
       formData.append("Role", Role);
       formData.append("InstitutionName", InstitutionName);
       formData.append("password", password);
+      formData.append("address", address);
+      formData.append("website", website);
+      formData.append("expectedStudents", expectedStudents);
+      formData.append("expectedTeachers", expectedTeachers);
 
       // Append files
       if (aadhar) formData.append("aadhar", aadhar);
@@ -292,8 +304,8 @@ const SignUpPage = () => {
                       </option>
                       <option>Dean</option>
                       <option>HOD</option>
-                      <option>Batch Incharge</option>
-                      <option>Subject Teacher</option>
+                      
+                      <option>Class Incharge</option>
                     </select>
                     <svg
                       className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
@@ -313,7 +325,79 @@ const SignUpPage = () => {
                     <p className="mt-1 text-xs text-red-600">{errors.Role}</p>
                   )}
                 </div>
+{/* Address (full width) */}
+                                <div className="md:col-span-2">
+                                  <label className="block text-xs font-medium text-gray-700 mb-2">
+                                    Address
+                                  </label>
+                                  <input
+                                    className="block w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-white text-sm transition-all focus:border-[#0A80F5] focus:ring-2 focus:ring-[#0A80F5]/20 focus:outline-none hover:border-gray-300"
+                                    type="text"
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                    placeholder="Institution Address"
+                                    required
+                                  />
+                                  {errors.address && (
+                                    <p className="mt-1 text-xs text-red-600">{errors.address}</p>
+                                  )}
+                                </div>
 
+                                {/* Website (full width) */}
+                                <div className="md:col-span-2">
+                                  <label className="block text-xs font-medium text-gray-700 mb-2">
+                                    Website
+                                  </label>
+                                  <input
+                                    className="block w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-white text-sm transition-all focus:border-[#0A80F5] focus:ring-2 focus:ring-[#0A80F5]/20 focus:outline-none hover:border-gray-300"
+                                    type="text"
+                                    value={website}
+                                    onChange={(e) => setWebsite(e.target.value)}
+                                    placeholder="https://yourinstitution.edu"
+                                    required
+                                  />
+                                  {errors.website && (
+                                    <p className="mt-1 text-xs text-red-600">{errors.website}</p>
+                                  )}
+                                </div>
+
+                                {/* Expected Students */}
+                                <div>
+                                  <label className="block text-xs font-medium text-gray-700 mb-2">
+                                    Expected Students
+                                  </label>
+                                  <input
+                                    className="block w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-white text-sm transition-all focus:border-[#0A80F5] focus:ring-2 focus:ring-[#0A80F5]/20 focus:outline-none hover:border-gray-300"
+                                    type="number"
+                                    min="0"
+                                    value={expectedStudents}
+                                    onChange={(e) => setExpectedStudents(e.target.value.replace(/\D/g, ""))}
+                                    placeholder="Number of students"
+                                    required
+                                  />
+                                  {errors.expectedStudents && (
+                                    <p className="mt-1 text-xs text-red-600">{errors.expectedStudents}</p>
+                                  )}
+                                </div>
+
+                                {/* Expected Teachers */}
+                                <div>
+                                  <label className="block text-xs font-medium text-gray-700 mb-2">
+                                    Expected Teachers
+                                  </label>
+                                  <input
+                                    className="block w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-white text-sm transition-all focus:border-[#0A80F5] focus:ring-2 focus:ring-[#0A80F5]/20 focus:outline-none hover:border-gray-300"
+                                    type="number"
+                                    min="0"
+                                    value={expectedTeachers}
+                                    onChange={(e) => setExpectedTeachers(e.target.value.replace(/\D/g, ""))}
+                                    placeholder="Number of teachers"
+                                    required
+                                  />
+                                  {errors.expectedTeachers && (
+                                    <p className="mt-1 text-xs text-red-600">{errors.expectedTeachers}</p>
+                                  )}
+                                </div>
                 {/* Institution (full width, moved below) */}
                 <div className="md:col-span-2">
                   <label className="block text-xs font-medium text-gray-700 mb-2">

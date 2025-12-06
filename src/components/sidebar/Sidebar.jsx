@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { InputFieldSvg, LogoSvg } from "../common/svg/svg";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { removeUser } from "../../utils/userSlice";
 
 const Sidebar = ({
   className = "",
@@ -10,6 +12,7 @@ const Sidebar = ({
   onClose,
 }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogout = async () => {
     try {
@@ -18,6 +21,7 @@ const Sidebar = ({
         {},
         { withCredentials: true }
       );
+      dispatch(removeUser())
       navigate("/signin");
     } catch (err) {
       console.error("Logout failed:", err);

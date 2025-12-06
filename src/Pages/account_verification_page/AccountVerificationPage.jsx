@@ -1,7 +1,13 @@
 import axios from "axios";
 import React, { useEffect } from "react";
+import { href, useNavigate } from "react-router-dom";
 
 const AccountVerificationPage = () => {
+
+  const navigate = useNavigate();
+  const gotoPage = () => {
+    navigate("/signin")
+  }
 
   const deleteToken = async() => {
     try{
@@ -101,7 +107,7 @@ const AccountVerificationPage = () => {
             </div>
 
             <div className="mt-6">
-              <button className="w-full rounded-lg py-2 bg-gradient-to-br from-[#0BCCEB] to-[#0A80F5] text-white">
+              <button onClick={gotoPage} className="w-full rounded-lg py-2 bg-gradient-to-br from-[#0BCCEB] to-[#0A80F5] text-white">
                 ← Back to Login
               </button>
             </div>
