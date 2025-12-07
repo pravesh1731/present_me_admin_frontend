@@ -9,7 +9,7 @@ const Dashboard = () => {
   return (
     <section className="space-y-6 ">
       <div className="rounded-xl bg-gradient-to-r from-[#0BCCEB] to-[#0A80F5] text-white p-8 shadow-md">
-        <h2 className="text-2xl font-semibold">Welcome back, {user.firstName}</h2>
+        <h2 className="text-2xl font-semibold">Welcome back, {user.firstName + " " + "(" + user.InstitutionName + ")"}</h2>
         <p className="mt-1">
           Here's what's happening with your attendance system today.
         </p>

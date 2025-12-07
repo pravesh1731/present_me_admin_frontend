@@ -1,7 +1,7 @@
 import React, { use, useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../sidebar/Sidebar";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../../utils/userSlice";
 import axios from "axios";
 
@@ -28,7 +28,7 @@ const Header = () => {
   const navigate = useNavigate();
   const fetchUserData = async () => {
     try {
-      const user = await axios.get("http://localhost:3000/admin/dashboard", {
+      const user = await axios.get("http://localhost:3000/admin/profile", {
         withCredentials: true,
       });
       
@@ -47,6 +47,8 @@ const Header = () => {
   useEffect(() => {
     fetchUserData();
   }, []);
+
+  const user = useSelector((store) => store.user);
 
   if (loading) {
     return (
@@ -116,7 +118,7 @@ const Header = () => {
 
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0BCCEB] to-[#0A80F5] flex items-center justify-center text-white font-semibold">
-              PC
+              {user.firstName[0].toUpperCase()+user.lastName[0].toUpperCase()}
             </div>
           </div>
         </header>
