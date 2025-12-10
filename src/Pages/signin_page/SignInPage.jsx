@@ -10,6 +10,7 @@ import Button from "../../components/common/buttons/button";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../utils/userSlice";
+import { BaseUrl } from "../../utils/constants";
 
 const SignInPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,7 +29,7 @@ const SignInPage = () => {
     
     try {
       const response = await axios.post(
-        "http://localhost:3000/admin/login",
+        BaseUrl + "/admin/login",
         {
           emailId,
           password,

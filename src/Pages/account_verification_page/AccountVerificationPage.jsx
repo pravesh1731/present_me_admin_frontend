@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import { href, useNavigate } from "react-router-dom";
+import { BaseUrl } from "../../utils/constants";
 
 const AccountVerificationPage = () => {
 
@@ -11,7 +12,7 @@ const AccountVerificationPage = () => {
 
   const deleteToken = async() => {
     try{
-      await axios.post("http://localhost:3000/admin/logout", {}, {withCredentials: true});
+      await axios.post(BaseUrl + "/admin/logout", {}, {withCredentials: true});
     }catch(err){
       console.log(err);
     }

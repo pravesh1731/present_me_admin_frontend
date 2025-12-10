@@ -92,7 +92,7 @@ const SignUpPage = () => {
       if (designationID) formData.append("designationID", designationID);
 
       const res = await axios.post(
-        "http://localhost:3000/admin/signup",
+        BaseUrl + "/admin/signup",
         formData,
         {
           withCredentials: true,

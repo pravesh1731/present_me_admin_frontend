@@ -17,7 +17,7 @@ const Sidebar = ({
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:3000/admin/logout",
+        BaseUrl + "/admin/logout",
         {},
         { withCredentials: true }
       );

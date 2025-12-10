@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../../utils/userSlice";
+import { BaseUrl } from "../../utils/constants";
 
 const permissions = [
   "User Management",
@@ -48,7 +49,7 @@ const ProfilePage = () => {
         }
 
         const response = await axios.patch(
-          "http://localhost:3000/admin/profile",
+          BaseUrl + "/admin/profile",
           formData,
           {
             withCredentials: true,

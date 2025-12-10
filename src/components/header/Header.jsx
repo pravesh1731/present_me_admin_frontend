@@ -4,6 +4,7 @@ import Sidebar from "../sidebar/Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../../utils/userSlice";
 import axios from "axios";
+import { BaseUrl } from "../../utils/constants";
 
 const titleMap = {
   "/admin": "Dashboard",
@@ -24,11 +25,14 @@ const Header = () => {
 
 
   //this is because jab ham refresh kre to user ka data lost na ho (logout jaisa na ho jye)
+  const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+
   const fetchUserData = async () => {
     try {
-      const user = await axios.get("http://localhost:3000/admin/profile", {
+      const user = await axios.get(BaseUrl  + "/admin/profile", {
         withCredentials: true,
       });
       
@@ -48,7 +52,7 @@ const Header = () => {
     fetchUserData();
   }, []);
 
-  const user = useSelector((store) => store.user);
+  
 
   if (loading) {
     return (
