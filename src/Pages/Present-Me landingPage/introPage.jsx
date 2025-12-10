@@ -229,6 +229,16 @@ const IntroPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 overflow-hidden">
+      {/* Development Banner - floating top right */}
+      <div className="fixed top-20 right-6 z-[101]">
+        <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 via-red-500 to-red-400 text-white font-semibold text-base shadow-xl rounded-xl border border-red-300 animate-pulse"
+          style={{ pointerEvents: "none", maxWidth: "320px" }}>
+          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" />
+          </svg>
+          <span>Website is under development.<br /><span className="text-xs font-normal opacity-80">Some features may not be available.</span></span>
+        </div>
+      </div>
       {/* Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#0BCCEB] to-[#0A80F5] origin-left z-[100]"
@@ -347,9 +357,9 @@ const IntroPage = () => {
               </motion.div>
               <span className="text-2xl font-bold">
                 <span className="bg-gradient-to-r from-[#0BCCEB] to-[#0A80F5] bg-clip-text text-transparent">
-                  PRESENT
+                  PRESENT-ME
                 </span>
-                <span className="text-gray-400">-ME</span>
+                {/* <span className="text-gray-400">-ME</span> */}
               </span>
             </motion.div>
             <div className="hidden md:flex items-center gap-8">
