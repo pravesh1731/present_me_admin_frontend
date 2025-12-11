@@ -4,6 +4,7 @@ import { InputFieldSvg, LogoSvg } from "../common/svg/svg";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { removeUser } from "../../utils/userSlice";
+import { BaseUrl } from "../../utils/constants";
 
 const Sidebar = ({
   className = "",

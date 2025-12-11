@@ -17,7 +17,7 @@ const AccountVerificationPage = () => {
       console.log(err);
     }
   }
-
+  
   useEffect(() => {
     deleteToken();
   }, []);

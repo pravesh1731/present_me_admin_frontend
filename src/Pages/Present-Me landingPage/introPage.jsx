@@ -30,6 +30,7 @@ import {
   TrendingUp,
   Award,
 } from "lucide-react";
+import axios from "axios";
 
 const IntroPage = () => {
   const navigate = useNavigate();
@@ -42,6 +43,39 @@ const IntroPage = () => {
     damping: 30,
     restDelta: 0.001,
   });
+
+const checkLoginedUser = async () => {
+    
+    
+    try {
+      const response = await axios.post(
+        BaseUrl + "/admin/login",
+        {
+          emailId,
+          password,
+        },
+        { withCredentials: true }
+      );
+     dispatch(addUser(response.data));
+     
+      // Expecting response.data.status to be 'verified' or 'pending'
+      if (response.data.institution.status === "verified") {
+        navigate("/admin");
+      } else if (response.data.institution.status === "pending") {
+        navigate("/pending_verification");
+      } else {
+        setError("Invalid credentials. Please try again.");
+      }
+      
+    } catch (err) {
+      console.log("Error during sign in:", err);
+      setError(
+        err.response?.data?.message || "Invalid credentials. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     setIsVisible(true);
