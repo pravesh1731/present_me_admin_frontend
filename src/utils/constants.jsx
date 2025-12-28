@@ -5,5 +5,5 @@ import React from "react";
 // export const BaseUrl = "/api";
 
 // development
-export const BaseUrl = location.hostname === "localhost" ? "http://localhost:3000" : "/api";
+export const BaseUrl = location.hostname === "localhost" ? "http://localhost:3000" : "/api" ;
 
