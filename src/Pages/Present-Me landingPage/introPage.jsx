@@ -45,8 +45,6 @@ const IntroPage = () => {
   });
 
 const checkLoginedUser = async () => {
-    
-    
     try {
       const response = await axios.post(
         BaseUrl + "/admin/login",

@@ -1,11 +1,16 @@
 import React, { useEffect } from "react";
 import { InputFieldSvg } from "../../components/common/svg/svg";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 
 const Dashboard = () => {
   const user = useSelector((store) => store.user);
+  const pendingTeachers = useSelector(store => store.teacher.pendingTeachers)
+  const verifiedTeachers = useSelector(store => store.teacher.verifiedTeachers)
+  const pendingCount = pendingTeachers?.length ?? 0
+  const verifiedCount = verifiedTeachers?.length ?? 0
+  const totalTeachers = pendingCount + verifiedCount
 
-  
+
   return (
     <section className="space-y-6 ">
       <div className="rounded-xl bg-gradient-to-r from-[#0BCCEB] to-[#0A80F5] text-white p-8 shadow-md">
@@ -23,8 +28,8 @@ const Dashboard = () => {
               <InputFieldSvg d1="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
             </div>
           </div>
-          <div className="mt-4 text-3xl font-bold">24</div>
-          <div className="text-xs text-gray-400 mt-1">3 pending approval</div>
+          <div className="mt-4 text-3xl font-bold">{totalTeachers}</div>
+          <div className="text-xs text-gray-400 mt-1">{pendingCount} pending approval</div>
         </div>
 
         <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
@@ -45,7 +50,7 @@ const Dashboard = () => {
               <InputFieldSvg d1="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
             </div>
           </div>
-          <div className="mt-4 text-3xl font-bold">3</div>
+          <div className="mt-4 text-3xl font-bold">{pendingCount}</div>
           <div className="text-xs text-gray-400 mt-1">Teacher applications</div>
         </div>
 
