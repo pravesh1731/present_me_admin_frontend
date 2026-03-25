@@ -8,6 +8,7 @@ import {
 import Button from "../../components/common/buttons/button.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BaseUrl } from "../../utils/constants.jsx";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
