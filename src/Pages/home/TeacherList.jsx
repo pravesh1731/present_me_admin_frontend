@@ -55,7 +55,6 @@ const TeacherCardApproved = ({ t, onView }) => (
     </div>
   </div>
 )
-
 const TeacherCardPending = ({ t, onView, onApprove, onReject }) => (
   <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
     <div className="flex items-start justify-between">
