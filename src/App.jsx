@@ -15,6 +15,7 @@ import AccountVerificationPage from "./Pages/account_verification_page/AccountVe
 import IntroPage from "./Pages/Present-Me landingPage/introPage";
 import { Provider } from "react-redux";
 import appStore from "./utils/appstore";
+import PrivacyPolicy from "./Pages/PrivacyPolicy";
 
 function App() {
   return (
@@ -30,6 +31,11 @@ const appRouter = createBrowserRouter([
    {
     path: "/",
     element: <IntroPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicy />,
     errorElement: <ErrorPage />,
   },
   {
@@ -65,6 +71,7 @@ const appRouter = createBrowserRouter([
     element: <AccountVerificationPage />,
     errorElement: <ErrorPage />,
   },
+  
 ]);
 
 export default App;

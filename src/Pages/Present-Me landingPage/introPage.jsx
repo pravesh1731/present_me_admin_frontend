@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/image.png";
 import {
   GraduationCap,
@@ -44,7 +44,7 @@ const IntroPage = () => {
     restDelta: 0.001,
   });
 
-const checkLoginedUser = async () => {
+  const checkLoginedUser = async () => {
     try {
       const response = await axios.post(
         BaseUrl + "/admin/login",
@@ -52,10 +52,10 @@ const checkLoginedUser = async () => {
           emailId,
           password,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
-     dispatch(addUser(response.data));
-     
+      dispatch(addUser(response.data));
+
       // Expecting response.data.status to be 'verified' or 'pending'
       if (response.data.institution.status === "verified") {
         navigate("/admin");
@@ -64,11 +64,10 @@ const checkLoginedUser = async () => {
       } else {
         setError("Invalid credentials. Please try again.");
       }
-      
     } catch (err) {
       console.log("Error during sign in:", err);
       setError(
-        err.response?.data?.message || "Invalid credentials. Please try again."
+        err.response?.data?.message || "Invalid credentials. Please try again.",
       );
     } finally {
       setIsLoading(false);
@@ -263,12 +262,30 @@ const checkLoginedUser = async () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 overflow-hidden">
       {/* Development Banner - floating top right */}
       <div className="fixed top-20 right-6 z-[101]">
-        <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 via-red-500 to-red-400 text-white font-semibold text-base shadow-xl rounded-xl border border-red-300 animate-pulse"
-          style={{ pointerEvents: "none", maxWidth: "320px" }}>
-          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" />
+        <div
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 via-red-500 to-red-400 text-white font-semibold text-base shadow-xl rounded-xl border border-red-300 animate-pulse"
+          style={{ pointerEvents: "none", maxWidth: "320px" }}
+        >
+          <svg
+            className="w-5 h-5 text-white"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"
+            />
           </svg>
-          <span>Website is under development.<br /><span className="text-xs font-normal opacity-80">Some features may not be available.</span></span>
+          <span>
+            Website is under development.
+            <br />
+            <span className="text-xs font-normal opacity-80">
+              Some features may not be available.
+            </span>
+          </span>
         </div>
       </div>
       {/* Progress Bar */}
@@ -319,20 +336,7 @@ const checkLoginedUser = async () => {
           }}
         />
       </div>
-
-      {/* Cursor Follower */}
-      <motion.div
-        className="fixed w-6 h-6 border-2 border-[#0A80F5]/50 rounded-full pointer-events-none z-50 hidden lg:block"
-        animate={{
-          x: mousePosition.x - 12,
-          y: mousePosition.y - 12,
-        }}
-        transition={{
-          type: "spring",
-          damping: 30,
-          stiffness: 200,
-        }}
-      />
+      
 
       {/* Navigation */}
       <motion.nav
@@ -345,7 +349,7 @@ const checkLoginedUser = async () => {
             <motion.div
               className="flex items-center gap-3"
               whileHover={{ scale: 1.05 }}
-            >
+             >
               <motion.div
                 className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg p-0.5 overflow-hidden relative"
                 animate={{
@@ -1460,7 +1464,7 @@ const checkLoginedUser = async () => {
                         {link}
                       </a>
                     </motion.li>
-                  )
+                  ),
                 )}
               </ul>
             </div>
@@ -1522,19 +1526,21 @@ const checkLoginedUser = async () => {
                 />
               </p>
               <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm">
-                {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(
-                  (link, idx) => (
-                    <motion.a
-                      key={idx}
-                      href="#"
-                      whileHover={{ scale: 1.05, color: "#ffffff" }}
+                {[
+                  { name: "Privacy Policy", path: "/privacy-policy" },
+                  { name: "Terms of Service", path: "#" },
+                  { name: "Cookie Policy", path: "#" },
+                ].map((link, idx) => (
+                  <motion.div key={idx}>
+                    <Link
+                      to={link.path}
                       className="text-gray-400 hover:text-white transition-colors relative group"
                     >
-                      {link}
+                      {link.name}
                       <motion.span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#0BCCEB] to-[#0A80F5] group-hover:w-full transition-all duration-300" />
-                    </motion.a>
-                  )
-                )}
+                    </Link>
+                  </motion.div>
+                ))}
               </div>
             </div>
           </motion.div>
