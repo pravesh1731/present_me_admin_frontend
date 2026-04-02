@@ -1530,6 +1530,7 @@ const IntroPage = () => {
                   { name: "Privacy Policy", path: "/privacy-policy" },
                   { name: "Terms of Service", path: "#" },
                   { name: "Cookie Policy", path: "#" },
+                  { name: "Delete Account", path: "/delete_account" },
                 ].map((link, idx) => (
                   <motion.div key={idx}>
                     <Link
