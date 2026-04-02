@@ -16,6 +16,7 @@ import IntroPage from "./Pages/Present-Me landingPage/introPage";
 import { Provider } from "react-redux";
 import appStore from "./utils/appstore";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
+import DeleteAccount from "./Pages/account_deletion/DeleteAccount";
 
 function App() {
   return (
@@ -36,6 +37,11 @@ const appRouter = createBrowserRouter([
   {
     path: "/privacy-policy",
     element: <PrivacyPolicy />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/delete_account",
+    element: <DeleteAccount />,
     errorElement: <ErrorPage />,
   },
   {
