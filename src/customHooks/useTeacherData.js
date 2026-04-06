@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import { setPendingTeacher, setVerifiedTeacher } from '../utils/teacherSlice'
 import { BaseUrl } from '../utils/constants'
 
-const useTeacherData = () => {
+export const useTeacherData = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -25,4 +25,4 @@ const useTeacherData = () => {
   }, [])
 }
 
-export default useTeacherData
+export default useTeacherData;

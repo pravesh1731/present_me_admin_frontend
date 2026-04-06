@@ -6,6 +6,7 @@ import { addUser } from "../../utils/userSlice";
 import axios from "axios";
 import { BaseUrl } from "../../utils/constants";
 import useTeacherData from "../../customHooks/useTeacherData";
+import useStudentData from "../../customHooks/useStudentData";
 
 const titleMap = {
   "/admin": "Dashboard",
@@ -18,6 +19,7 @@ const titleMap = {
 
 const Header = () => {
   useTeacherData();
+  useStudentData();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loading, setLoading] = useState(true);

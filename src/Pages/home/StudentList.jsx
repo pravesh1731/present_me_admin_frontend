@@ -1,122 +1,34 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { BaseUrl } from "../../utils/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { setStudents } from "../../utils/studentSlice";
 
-const sampleStudents = [
-  {
-    id: "STU001",
-    name: "Alex Johnson",
-    email: "alex.johnson@student.edu",
-    grade: 10,
-    className: "Mathematics",
-    teacher: "Emily Rodriguez",
-    attendance: 95,
-    lastAttendance: "2024-01-15",
-    status: "active",
-  },
-  {
-    id: "STU002",
-    name: "Emma Davis",
-    email: "emma.davis@student.edu",
-    grade: 11,
-    className: "Biology",
-    teacher: "Michael Chen",
-    attendance: 88,
-    lastAttendance: "2024-01-14",
-    status: "active",
-  },
-  {
-    id: "STU003",
-    name: "Noah Williams",
-    email: "noah.williams@student.edu",
-    grade: 9,
-    className: "English Literature",
-    teacher: "Sarah Johnson",
-    attendance: 92,
-    lastAttendance: "2024-01-16",
-    status: "active",
-  },
-  {
-    id: "STU004",
-    name: "Olivia Brown",
-    email: "olivia.brown@student.edu",
-    grade: 12,
-    className: "World History",
-    teacher: "David Wilson",
-    attendance: 78,
-    lastAttendance: "2024-01-10",
-    status: "warning",
-  },
-  {
-    id: "STU005",
-    name: "Liam Garcia",
-    email: "liam.garcia@student.edu",
-    grade: 10,
-    className: "Chemistry",
-    teacher: "Michael Chen",
-    attendance: 96,
-    lastAttendance: "2024-01-16",
-    status: "active",
-  },
-  {
-    id: "STU006",
-    name: "Sophia Martinez",
-    email: "sophia.martinez@student.edu",
-    grade: 11,
-    className: "Calculus",
-    teacher: "Emily Rodriguez",
-    attendance: 85,
-    lastAttendance: "2024-01-13",
-    status: "active",
-  },
-  {
-    id: "STU007",
-    name: "Pravesh",
-    email: "pravesh@student.edu",
-    grade: 11,
-    className: "Hindi",
-    teacher: "Ravi Kumar",
-    attendance: 80,
-    lastAttendance: "2024-01-13",
-    status: "active",
-  },
-  {
-    id: "STU008",
-    name: "Jaanhvi",
-    email: "janvi@student.edu",
-    grade: 9,
-    className: "Python",
-    teacher: "Rahul",
-    attendance: 95,
-    lastAttendance: "2024-01-15",
-    status: "active",
-  },
-  {
-    id: "STU009",
-    name: "Ram",
-    email: "ram@student.edu",
-    grade: 8,
-    className: "OOPS",
-    teacher: "Sunny",
-    attendance: 45,
-    lastAttendance: "2024-01-20",
-    status: "active",
-  },
-];
-
-const StudentCard = ({ s, onView, onEdit }) => (
-  <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+const StudentCard = ({ s, onView }) => (
+  <div className="group bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+    {" "}
     <div className="flex items-start justify-between">
       <div>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#c7b9ff] to-[#8bd3ff] flex items-center justify-center text-white font-semibold">
-            {s.name
-              .split(" ")
-              .map((n) => n[0])
-              .slice(0, 2)
-              .join("")}
-          </div>
+          {s.profilePicUrl ? (
+            <img
+              src={s.profilePicUrl}
+              alt={s.firstName}
+              className="w-11 h-11 rounded-full object-cover ring-2 ring-white shadow"
+            />
+          ) : (
+            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-indigo-400 to-cyan-400 flex items-center justify-center text-white font-semibold shadow">
+              {(s.firstName || "User")
+                .split(" ")
+                .map((n) => n[0])
+                .slice(0, 2)
+                .join("")
+                .toUpperCase()}
+            </div>
+          )}
           <div>
-            <div className="font-medium">{s.name}</div>
-            <div className="text-xs text-gray-500">ID: {s.id}</div>
+            <div className="font-medium">{s.firstName + " " + s.lastName}</div>
+            <div className="text-xs text-gray-500">ID: {s.studentId}</div>
           </div>
         </div>
       </div>
@@ -132,40 +44,28 @@ const StudentCard = ({ s, onView, onEdit }) => (
         </span>
       </div>
     </div>
-
-    <div className="mt-4 grid grid-cols-2 gap-2 text-sm text-gray-600">
-      <div>Grade:</div>
-      <div className="text-right">{s.grade}</div>
-      <div>Class:</div>
-      <div className="text-right">{s.className}</div>
-      <div>Teacher:</div>
-      <div className="text-right">{s.teacher}</div>
-      <div>Attendance:</div>
-      <div
-        className={`text-right font-semibold ${
-          s.attendance < 80
-            ? "text-red-500"
-            : s.attendance < 90
-            ? "text-yellow-600"
-            : "text-green-600"
-        }`}
-      >
-        {s.attendance}%
+    <div className="mt-4 space-y-2 text-sm text-gray-600">
+      <div className="flex justify-between">
+        <span className="text-gray-400">Email</span>
+        <span className="font-medium">{s.emailId}</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="text-gray-400">Phone</span>
+        <span>{s.phone}</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="text-gray-400">Roll No</span>
+        <span>{s.rollNo}</span>
       </div>
     </div>
-
-    <div className="mt-4 flex gap-3">
+    <div className="mt-5 flex gap-3">
       <button
         onClick={() => onView(s)}
-        className="flex-1 border border-gray-200 rounded-md py-2 text-sm flex items-center justify-center gap-2"
+        className="flex-1 bg-gray-900 text-white rounded-lg py-2 text-sm hover:bg-black transition"
       >
-        {" "}
-        <span>👁️</span> View
+        View
       </button>
-      <button
-        onClick={() => onEdit(s)}
-        className="flex-1 border border-purple-200 text-purple-700 rounded-md py-2 text-sm"
-      >
+      <button className="flex-1 border border-gray-200 rounded-lg py-2 text-sm hover:bg-gray-50 transition">
         Edit
       </button>
     </div>
@@ -178,22 +78,22 @@ const StudentList = () => {
   const [filterGrade, setFilterGrade] = useState("All Grades");
   const [viewing, setViewing] = useState(null);
   const [viewMode, setViewMode] = useState("grid");
+  
+
+  const studentList = useSelector((store) => store.student) || [];
 
   // build dynamic filter options
-  const classes = Array.from(new Set(sampleStudents.map((s) => s.className)));
-  const grades = Array.from(new Set(sampleStudents.map((s) => s.grade))).sort(
-    (a, b) => a - b
-  );
+  // const classes = Array.from(new Set(sampleStudents.map((s) => s.className)));
+  // const grades = Array.from(new Set(sampleStudents.map((s) => s.grade))).sort(
+  //   (a, b) => a - b,
+  // );
 
-  const filtered = sampleStudents.filter((s) => {
+  const filtered = studentList.filter((s) => {
     const matchesQuery =
-      s.name.toLowerCase().includes(query.toLowerCase()) ||
-      s.id.toLowerCase().includes(query.toLowerCase());
-    const matchesClass =
-      filterClass === "All Classes" || s.className === filterClass;
-    const matchesGrade =
-      filterGrade === "All Grades" || String(s.grade) === String(filterGrade);
-    return matchesQuery && matchesClass && matchesGrade;
+      s.firstName.toLowerCase().includes(query.toLowerCase()) ||
+      s.studentId.toLowerCase().includes(query.toLowerCase());
+
+    return matchesQuery;
   });
 
   const openView = (s) => setViewing(s);
@@ -201,21 +101,13 @@ const StudentList = () => {
   const onEdit = (s) => alert("Edit " + s.name);
 
   return (
-    <section>
+    <section className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4">
       <div className="flex items-start justify-between gap-4 mb-2">
         <div>
           <h2 className="text-2xl font-semibold">Students Management</h2>
           <p className="text-gray-500">
             View and manage student records and attendance
           </p>
-        </div>
-        <div className="flex items-center">
-          <button
-            onClick={() => alert("Add student placeholder")}
-            className="ml-2 bg-gradient-to-br from-[#0bcceb] to-[#0a80f5] text-white px-4 py-2 rounded-lg shadow-sm"
-          >
-          👤+ Add Student
-          </button>
         </div>
       </div>
 
@@ -225,11 +117,11 @@ const StudentList = () => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search students..."
-            className="w-full md:w-2/3 rounded-lg border border-gray-200 px-4 py-2"
+            className="w-full md:w-2/3 rounded-xl border border-gray-200 px-4 py-2 focus:ring-2 focus:ring-indigo-400 outline-none transition"
           />
         </div>
         <div className="flex items-center gap-2">
-          <select
+          {/* <select
             value={filterClass}
             onChange={(e) => setFilterClass(e.target.value)}
             className="rounded-lg border border-gray-200 px-3 py-2"
@@ -238,8 +130,8 @@ const StudentList = () => {
             {classes.map((c) => (
               <option key={c}>{c}</option>
             ))}
-          </select>
-          <select
+          </select> */}
+          {/* <select
             value={filterGrade}
             onChange={(e) => setFilterGrade(e.target.value)}
             className="rounded-lg border border-gray-200 px-3 py-2"
@@ -250,7 +142,7 @@ const StudentList = () => {
                 {g}
               </option>
             ))}
-          </select>
+          </select> */}
           <button className="bg-white border border-gray-200 rounded-lg px-3 py-2">
             Export
           </button>
@@ -298,42 +190,53 @@ const StudentList = () => {
             {filtered.map((s) => (
               <div key={s.id} className="flex items-center justify-between p-3">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600">
-                    {s.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .slice(0, 2)
-                      .join("")}
-                  </div>
+                  {s.profilePicUrl ? (
+                    <img
+                      src={s.profilePicUrl}
+                      alt={s.firstName}
+                      className="w-11 h-11 rounded-full object-cover ring-2 ring-white shadow"
+                    />
+                  ) : (
+                    <div className="w-11 h-11 rounded-full bg-gradient-to-br from-indigo-400 to-cyan-400 flex items-center justify-center text-white font-semibold shadow">
+                      {(s.firstName || "User")
+                        .split(" ")
+                        .map((n) => n[0])
+                        .slice(0, 2)
+                        .join("")
+                        .toUpperCase()}
+                    </div>
+                  )}
                   <div>
-                    <div className="font-medium">{s.name}</div>
+                    <div className="font-medium">
+                      {s.firstName} {s.lastName}
+                    </div>
                     <div className="text-xs text-gray-500">
-                      {s.id} • Grade {s.grade} • {s.className}
+                      {s.studentId} • Email {s.emailId} • {s.className}
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
                   <div className="text-right mr-4">
-                    <div
+                    {/* <div
                       className={`text-sm font-semibold ${
                         s.attendance < 80
                           ? "text-red-500"
                           : s.attendance < 90
-                          ? "text-yellow-600"
-                          : "text-green-600"
+                            ? "text-yellow-600"
+                            : "text-green-600"
                       }`}
                     >
                       {s.attendance}%
-                    </div>
+                    </div> */}
                     <div className="text-xs text-gray-500">{s.teacher}</div>
                   </div>
                   <div className="flex items-center gap-3">
                     <span
-                      className={`text-xs px-2 py-1 rounded-full ${
+                      className={`text-xs px-3 py-1 rounded-full font-medium ${
                         s.status === "warning"
-                          ? "bg-yellow-50 text-yellow-700"
-                          : "bg-green-50 text-green-700"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-green-100 text-green-700"
                       }`}
                     >
                       {s.status === "warning" ? "Low Attendance" : "Active"}
@@ -363,7 +266,9 @@ const StudentList = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-lg font-semibold">{viewing.name}</h3>
+                <h3 className="text-lg font-semibold">
+                  {viewing.firstName + " " + viewing.lastName}
+                </h3>
                 <div className="text-xs text-gray-500">Student Details</div>
               </div>
               <button
@@ -385,41 +290,41 @@ const StudentList = () => {
             <div className="mt-4 text-sm text-gray-700">
               <div className="mb-3">
                 <div className="text-xs text-gray-500">Student ID:</div>
-                <div className="mt-1">{viewing.id}</div>
+                <div className="mt-1">{viewing.studentId}</div>
               </div>
               <div className="mb-3">
                 <div className="text-xs text-gray-500">Email:</div>
-                <div className="mt-1">{viewing.email}</div>
+                <div className="mt-1">{viewing.emailId}</div>
               </div>
               <div className="mb-3">
-                <div className="text-xs text-gray-500">Grade:</div>
-                <div className="mt-1">{viewing.grade}</div>
+                <div className="text-xs text-gray-500">Phone:</div>
+                <div className="mt-1">{viewing.phone}</div>
               </div>
               <div className="mb-3">
-                <div className="text-xs text-gray-500">Class:</div>
-                <div className="mt-1">{viewing.className}</div>
+                <div className="text-xs text-gray-500">Roll No:</div>
+                <div className="mt-1">{viewing.rollNo}</div>
               </div>
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <div className="text-xs text-gray-500">Teacher:</div>
                 <div className="mt-1">{viewing.teacher}</div>
-              </div>
-              <div className="mb-3">
+              </div> */}
+              {/* <div className="mb-3">
                 <div className="text-xs text-gray-500">Attendance Rate:</div>
                 <div
                   className={`mt-1 font-semibold ${
                     viewing.attendance < 80
                       ? "text-red-500"
                       : viewing.attendance < 90
-                      ? "text-yellow-600"
-                      : "text-green-600"
+                        ? "text-yellow-600"
+                        : "text-green-600"
                   }`}
                 >
                   {viewing.attendance}%
                 </div>
-              </div>
+              </div> */}
               <div className="mb-1">
-                <div className="text-xs text-gray-500">Last Attendance:</div>
-                <div className="mt-1">{viewing.lastAttendance}</div>
+                <div className="text-xs text-gray-500">Joined At</div>
+                <div className="mt-1">{viewing.createdAt}</div>
               </div>
             </div>
           </div>
