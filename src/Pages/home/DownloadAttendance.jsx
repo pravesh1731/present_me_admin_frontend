@@ -1,9 +1,8 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 const classes = ['All Classes', 'Algebra I', 'World History', 'Grade 8', 'Grade 9']
-const teachers = ['All Teachers', 'Emily Rodriguez', 'Michael Chen', 'Sarah Johnson', 'David Wilson']
-const grades = ['All Grades', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9']
-const reportTypes = ['Summary', 'Detailed', 'Analytics']
+
 
 const sampleReports = [
   { id: 1, title: 'Monthly Attendance Report - December 2023', meta: 'All Classes • All Teachers • Dec 1-31, 2023', size: '2.4 MB', date: '2024-01-05', type: 'Summary' },
@@ -12,6 +11,15 @@ const sampleReports = [
 ]
 
 const DownloadAttendance = () => {
+
+  const studentList = useSelector((store) => store.student) || [];
+  const verifiedTeachers = useSelector(store => store.teacher.verifiedTeachers)
+  const teacherNames = verifiedTeachers.map(t => t.firstName + ' ' + t.lastName);
+
+  console.log('Verified Teachers:', teacherNames);
+
+
+
   return (
     <div className="space-y-6">
       <div>
@@ -24,7 +32,7 @@ const DownloadAttendance = () => {
           <div className="bg-gradient-to-br from-white to-[#f3f2ff] rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-lg font-medium">Generate New Report</h3>
+                <h3 className="text-lg font-medium">Download New Report</h3>
                 <p className="text-sm text-gray-500">Configure your attendance report parameters</p>
               </div>
             </div>
@@ -45,36 +53,14 @@ const DownloadAttendance = () => {
                 <label className="text-xs text-gray-500 mb-1 block">Teacher</label>
                 <div className="relative">
                   <select className="w-full appearance-none rounded-lg border border-gray-200 px-3 py-2 bg-white">
-                    {teachers.map(t => <option key={t} value={t}>{t}</option>)}
+                    {teacherNames.map((name, index) => <option key={index} value={name}>{name}</option>)}
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
                     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="text-gray-400"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
                   </div>
                 </div>
               </div>
-
-              <div>
-                <label className="text-xs text-gray-500 mb-1 block">Grade</label>
-                <div className="relative">
-                  <select className="w-full appearance-none rounded-lg border border-gray-200 px-3 py-2 bg-white">
-                    {grades.map(g => <option key={g} value={g}>{g}</option>)}
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="text-gray-400"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <label className="text-xs text-gray-500 mb-1 block">Report Type</label>
-                <div className="relative">
-                  <select className="w-full appearance-none rounded-lg border border-gray-200 px-3 py-2 bg-white">
-                    {reportTypes.map(r => <option key={r} value={r}>{r}</option>)}
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="text-gray-400"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
-                  </div>
-                </div>
-              </div>
+              
 
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Start Date</label>
@@ -87,7 +73,7 @@ const DownloadAttendance = () => {
             </div>
 
             <div className="mt-6 flex items-center gap-3">
-              <button className="px-6 py-3 rounded-full bg-gradient-to-br from-[#0bcceb] to-[#0a80f5] text-white font-medium shadow">Generate Report</button>
+              <button className="px-6 py-3 rounded-full bg-gradient-to-br from-[#0bcceb] to-[#0a80f5] text-white font-medium shadow">Download Attendance</button>
               <button className="px-4 py-2 rounded-full border border-gray-200 bg-white">Preview</button>
             </div>
           </div>
@@ -103,7 +89,7 @@ const DownloadAttendance = () => {
             <div className="space-y-3 mb-4">
               <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-500">Total Students</div>
-                <div className="font-medium">486</div>
+                <div className="font-medium">{studentList.length}</div>
               </div>
               <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-500">Total Classes</div>
@@ -111,7 +97,7 @@ const DownloadAttendance = () => {
               </div>
               <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-500">Active Teachers</div>
-                <div className="font-medium">4</div>
+                <div className="font-medium">{verifiedTeachers?.length??0}</div>
               </div>
             </div>
 
