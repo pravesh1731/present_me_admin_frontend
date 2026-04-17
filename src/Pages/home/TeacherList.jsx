@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { BaseUrl } from "../../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { setPendingTeacher, setVerifiedTeacher } from "../../utils/teacherSlice";
+import { form } from "framer-motion/client";
 
 
 // TeacherCardApproved Component
@@ -744,7 +745,22 @@ const TeacherList = () => {
   const [loadingId, setLoadingId] = useState(null);
   const [actionType, setActionType] = useState(null);
   const [viewMode, setViewMode] = useState("list");
+  const [viewing, setViewing] = useState(false);
   const dispatch = useDispatch();
+  const closeView = () => setViewing(null);
+  const [formData, setFormData] = useState({
+  firstName: "",
+  lastName: "",
+  emailId: "",
+  phone: "",
+  hotspotName: "",
+  instituteId: "",
+  password: "",
+  confirmPassword: ""
+});
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState("");
+const [success, setSuccess] = useState("");
 
   // Read from Redux store
   const pendingTeachers =
@@ -798,6 +814,7 @@ const TeacherList = () => {
     }
   };
 
+  
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") {
@@ -869,12 +886,88 @@ const TeacherList = () => {
         />
       );
     }
+
+    const handleInputChange = (e) => {
+  const { name, value } = e.target;
+  setFormData(prev => ({
+    ...prev,
+    [name]: value
+  }));
+  // Clear error when user starts typing
+  if (error) setError("");
+};
+
+// Handle form submission
+const handleAddTeacher = async (e) => {
+  e.preventDefault();
+  
+  // Validation
+  if (formData.password !== formData.confirmPassword) {
+    setError("Passwords do not match");
+    return;
+  }
+  
+  if (formData.password.length < 6) {
+    setError("Password must be at least 6 characters long");
+    return;
+  }
+  
+  setLoading(true);
+  setError("");
+  setSuccess("");
+  
+  try {
+    const response = await axios.post(
+      `${BaseUrl}/admin/institutes/teachers`,
+      {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        emailId: formData.emailId,
+        phone: formData.phone,
+        hotspotName: formData.hotspotName,
+        instituteId: formData.instituteId,
+        password: formData.password
+      },
+      { withCredentials: true }
+    );
+    
+    if (response.data.success) {
+      setSuccess("Teacher added successfully!");
+      // Reset form
+      setFormData({
+        firstName: "",
+        lastName: "",
+        emailId: "",
+        phone: "",
+        hotspotName: "",
+        instituteId: "",
+        password: "",
+        confirmPassword: ""
+      });
+      // Close modal after 2 seconds
+      setTimeout(() => {
+        closeView();
+        // Refresh teacher list if needed
+        // refreshTeacherData();
+      }, 2000);
+    }
+  } catch (err) {
+    setError(err.response?.data?.message || "Error adding teacher. Please try again.");
+    console.error("Error adding teacher:", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
     
     // Default list view
     return (
-      <>
-        <div className="flex items-center gap-4 mb-6">
+      <section>
+        <div className="flex items-center gap-4 mb-6 justify-between">
           <h2 className="text-2xl font-semibold">Teachers Management</h2>
+          <div>
+            <button onClick={() => setViewing(true)}>Add Teacher</button>
+          </div>
         </div>
 
         <p className="text-gray-500 mb-4">
@@ -935,7 +1028,177 @@ const TeacherList = () => {
             </div>
           )}
         </div>
-      </>
+
+        {viewing && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="absolute inset-0 bg-black/40" onClick={closeView} />
+
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="relative z-10 w-[92%] md:w-[600px] bg-white rounded-xl shadow-xl p-6 max-h-[90vh] overflow-y-auto"
+    >
+      <div className="flex items-start justify-between mb-4 sticky top-0 bg-white pb-2">
+        <div>
+          <h3 className="text-lg font-semibold">
+            Add New Teacher
+          </h3>
+          <div className="text-xs text-gray-500">Fill in teacher details</div>
+        </div>
+        <button
+          onClick={closeView}
+          className="text-[#6b46c1] border border-[#e9dbff] bg-white rounded-md w-8 h-8 flex items-center justify-center"
+        >
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M6 18L18 6M6 6l12 12"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <form onSubmit={handleAddTeacher} className="mt-4 text-sm text-gray-700 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="text-xs text-gray-500 font-medium">First Name *</label>
+            <input
+              type="text"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleInputChange}
+              required
+              placeholder="Enter first name"
+              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="text-xs text-gray-500 font-medium">Last Name *</label>
+            <input
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleInputChange}
+              required
+              placeholder="Enter last name"
+              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="text-xs text-gray-500 font-medium">Email ID *</label>
+          <input
+            type="email"
+            name="emailId"
+            value={formData.emailId}
+            onChange={handleInputChange}
+            required
+            placeholder="Enter email address"
+            className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        <div>
+          <label className="text-xs text-gray-500 font-medium">Phone Number *</label>
+          <input
+            type="tel"
+            name="phone"
+            value={formData.phone}
+            onChange={handleInputChange}
+            required
+            placeholder="Enter phone number"
+            className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        <div>
+          <label className="text-xs text-gray-500 font-medium">Hotspot Name</label>
+          <input
+            type="text"
+            name="hotspotName"
+            value={formData.hotspotName}
+            onChange={handleInputChange}
+            placeholder="Enter hotspot name"
+            className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        <div>
+          <label className="text-xs text-gray-500 font-medium">Institute ID *</label>
+          <input
+            type="text"
+            name="instituteId"
+            value={formData.instituteId}
+            onChange={handleInputChange}
+            required
+            placeholder="Enter institute ID"
+            className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        <div>
+          <label className="text-xs text-gray-500 font-medium">Password *</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            required
+            placeholder="Enter password"
+            className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        <div>
+          <label className="text-xs text-gray-500 font-medium">Confirm Password *</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleInputChange}
+            required
+            placeholder="Confirm password"
+            className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-2 rounded-lg text-sm">
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-2 rounded-lg text-sm">
+            {success}
+          </div>
+        )}
+
+        <div className="flex gap-3 pt-4">
+          <button
+            type="button"
+            onClick={closeView}
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Adding Teacher..." : "Add Teacher"}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+      </section>
     );
   };
 
